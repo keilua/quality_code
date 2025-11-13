@@ -51,7 +51,7 @@ public class Tests
         }
 
         var total = cart.CalculateTotal();
-        if (total > 10)
+        if (DateTime.Now.DayOfWeek != DayOfWeek.Monday)
             total.Should().Be(7);
         else
             total.Should().Be(10);
