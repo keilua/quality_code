@@ -1,5 +1,9 @@
 namespace CodeQuality.Samples.CleanCode.Yahtzee;
 
+/// <summary>
+/// Objectif N°1: Refactorer le code selon les principes/pratiques de Clean Code
+/// Objectif N°2: Exposer une seule méthode Evaluate(...) qui retournera la liste des figures possibles, avec leur score associés.
+/// </summary>
 public class YahtzeeGame
 {
     protected int[] dice;
