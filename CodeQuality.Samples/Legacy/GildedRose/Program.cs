@@ -1,10 +1,13 @@
+using System.Text;
+
 namespace CodeQuality.Samples.Legacy.GildedRose;
 
 public class Program
 {
-    public static void Start(string[] args)
+    public static string RunSimulation(int days = 2)
     {
-        Console.WriteLine("OMGHAI!");
+        var sb = new StringBuilder();
+        sb.AppendLine("OMGHAI!");
 
         IList<Item> items = new List<Item>
         {
@@ -37,22 +40,18 @@ public class Program
 
         var app = new GildedRose(items);
 
-        int days = 2;
-        if (args.Length > 0)
-        {
-            days = int.Parse(args[0]) + 1;
-        }
-
         for (var i = 0; i < days; i++)
         {
-            Console.WriteLine("-------- day " + i + " --------");
-            Console.WriteLine("name, sellIn, quality");
+            sb.AppendLine("-------- day " + i + " --------");
+            sb.AppendLine("name, sellIn, quality");
             for (var j = 0; j < items.Count; j++)
             {
-                Console.WriteLine(items[j].Name + ", " + items[j].SellIn + ", " + items[j].Quality);
+                sb.AppendLine(items[j].Name + ", " + items[j].SellIn + ", " + items[j].Quality);
             }
-            Console.WriteLine("");
+            sb.AppendLine("");
             app.UpdateQuality();
         }
+
+        return sb.ToString();
     }
 }
