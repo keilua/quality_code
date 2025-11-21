@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 app.MapGet("/products", () =>
 {
-    var filePath = Path.Combine(AppContext.BaseDirectory, "products_2.json");
+    var filePath = Path.Combine(AppContext.BaseDirectory, "products_1.json");
     var json = File.ReadAllText(filePath);
     var products = JsonSerializer.Deserialize<List<Product>>(json);
     var accessoriesValue = products.Where(product => product.Name != "Laptop" && product.Name != "Screen").ToList()
