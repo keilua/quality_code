@@ -1,10 +1,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Microsoft.Extensions.Caching.Memory;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
-app.MapGet("/products", (IMemoryCache cache) =>
+app.MapGet("/products", () =>
 {
     var filePath = Path.Combine(AppContext.BaseDirectory, "products_2.json");
     var json = File.ReadAllText(filePath);
