@@ -1,0 +1,7 @@
+[
+  { "name": "Laptop", "price": 1499.99 },
+  { "name": "Mouse", "price": 29.99 },
+  { "name": "Keyboard", "price": 89.99 },
+  { "name": "Screen", "price": 399.99 },
+  { "name": "USB Cable", "price": 9.99 }
+]
