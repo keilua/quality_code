@@ -21,6 +21,10 @@
         </PackageReference>
     </ItemGroup>
 
+      <ItemGroup>
+        <Using Include="Xunit"/>
+      </ItemGroup>
+
     <ItemGroup>
       <None Update="TestDrivenDevelopment\Submarine\Input.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
