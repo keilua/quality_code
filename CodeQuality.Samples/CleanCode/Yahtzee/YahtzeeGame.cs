@@ -24,115 +24,63 @@ public class YahtzeeGame
 
     public static int Chance(int d1, int d2, int d3, int d4, int d5)
     {
-        var total = 0;
-        total += d1;
-        total += d2;
-        total += d3;
-        total += d4;
-        total += d5;
-        return total;
-    }
+        return d1+d2+d3+d4+d5;
+    }   
+    private int AggregateDiceValue(int diceValue)
+{
+    return dice.Where(d => d == diceValue).Sum();
+}
+    public int Sixes() => this.AggregateDiceValue(6);
+    public int Fives() => this.AggregateDiceValue(5);
+    public int Fours() => this.AggregateDiceValue(4);
+    public int Threes()=> this.AggregateDiceValue(3);
+    public int Twos() => this.AggregateDiceValue(2);
+    public int Ones() => this.AggregateDiceValue(1);
 
-    public int Fives()
+    private static int OfAKind(int countRequired, params int[] dice)
     {
-        var s = 0;
-        int i;
-        for (i = 0; i < dice.Length; i++)
-            if (dice[i] == 5)
-                s = s + 5;
-        return s;
-    }
+        int[] counts = new int[6];
+        foreach (var die in dice)
+            counts[die - 1]++;
 
-    public static int FourOfAKind(int _1, int _2, int d3, int d4, int d5)
-    {
-        int[] tallies;
-        tallies = new int[6];
-        tallies[_1 - 1]++;
-        tallies[_2 - 1]++;
-        tallies[d3 - 1]++;
-        tallies[d4 - 1]++;
-        tallies[d5 - 1]++;
-        for (var i = 0; i < 6; i++)
-            if (tallies[i] >= 4)
-                return (i + 1) * 4;
+        for (int i = 0; i < 6; i++)
+            if (counts[i] >= countRequired)
+                return (i + 1) * countRequired;
+
         return 0;
     }
 
-    public int Fours()
+    public static int ThreeOfAKind(int d1, int d2, int d3, int d4, int d5)
     {
-        int sum;
-        sum = 0;
-        for (var at = 0; at != 5; at++)
-            if (dice[at] == 4)
-                sum += 4;
-        return sum;
+        return OfAKind(3, d1, d2, d3, d4, d5);
+    }
+
+    public static int FourOfAKind(int d1, int d2, int d3, int d4, int d5)
+    {
+        return OfAKind(4, d1, d2, d3, d4, d5);
     }
 
     public static int FullHouse(int d1, int d2, int d3, int d4, int d5)
     {
-        int[] tallies;
-        var _2 = false;
-        int i;
-        var _2_at = 0;
-        var _3 = false;
-        var _3_at = 0;
+        int[] counts = new int[6];
+        foreach (var die in new[] { d1, d2, d3, d4, d5 })
+            counts[die - 1]++;
 
+        int pair = Array.FindIndex(counts, c => c == 2) + 1;
+        int three = Array.FindIndex(counts, c => c == 3) + 1;
 
-        tallies = new int[6];
-        tallies[d1 - 1] += 1;
-        tallies[d2 - 1] += 1;
-        tallies[d3 - 1] += 1;
-        tallies[d4 - 1] += 1;
-        tallies[d5 - 1] += 1;
-
-        for (i = 0; i != 6; i += 1)
-            if (tallies[i] == 2)
-            {
-                _2 = true;
-                _2_at = i + 1;
-            }
-
-        for (i = 0; i != 6; i += 1)
-            if (tallies[i] == 3)
-            {
-                _3 = true;
-                _3_at = i + 1;
-            }
-
-        if (_2 && _3)
-            return _2_at * 2 + _3_at * 3;
-        return 0;
+        return (pair > 0 && three > 0) ? pair * 2 + three * 3 : 0;
     }
 
     public static int LargeStraight(int d1, int d2, int d3, int d4, int d5)
     {
-        int[] tallies;
-        tallies = new int[6];
-        tallies[d1 - 1] += 1;
-        tallies[d2 - 1] += 1;
-        tallies[d3 - 1] += 1;
-        tallies[d4 - 1] += 1;
-        tallies[d5 - 1] += 1;
-        if (tallies[1] == 1 &&
-            tallies[2] == 1 &&
-            tallies[3] == 1 &&
-            tallies[4] == 1
-            && tallies[5] == 1)
-            return 20;
-        return 0;
+        int[] dice = { d1, d2, d3, d4, d5 };
+        return Enumerable.Range(2, 5).All(n => dice.Contains(n)) ? 20 : 0;
     }
-
-    public static int Ones(int d1, int d2, int d3, int d4, int d5)
+    public static int SmallStraight(int d1, int d2, int d3, int d4, int d5)
     {
-        var sum = 0;
-        if (d1 == 1) sum++;
-        if (d2 == 1) sum++;
-        if (d3 == 1) sum++;
-        if (d4 == 1) sum++;
-        if (d5 == 1)
-            sum++;
-
-        return sum;
+        int[] dice = { d1, d2, d3, d4, d5 };
+        return Enumerable.Range(1, 5).All(n => dice.Contains(n)) ? 15 : 0;
     }
 
     public int ScorePair(int d1, int d2, int d3, int d4, int d5)
@@ -148,60 +96,6 @@ public class YahtzeeGame
             if (counts[6 - at - 1] >= 2)
                 return (6 - at) * 2;
         return 0;
-    }
-
-    public int sixes()
-    {
-        var sum = 0;
-        for (var at = 0; at < dice.Length; at++)
-            if (dice[at] == 6)
-                sum = sum + 6;
-        return sum;
-    }
-
-    public static int SmallStraight(int d1, int d2, int d3, int d4, int d5)
-    {
-        int[] tallies;
-        tallies = new int[6];
-        tallies[d1 - 1] += 1;
-        tallies[d2 - 1] += 1;
-        tallies[d3 - 1] += 1;
-        tallies[d4 - 1] += 1;
-        tallies[d5 - 1] += 1;
-        if (tallies[0] == 1 &&
-            tallies[1] == 1 &&
-            tallies[2] == 1 &&
-            tallies[3] == 1 &&
-            tallies[4] == 1)
-            return 15;
-        return 0;
-    }
-
-    public static int ThreeOfAKind(int d1, int d2, int d3, int d4, int d5)
-    {
-        int[] t;
-        t = new int[6];
-        t[d1 - 1]++;
-        t[d2 - 1]++;
-        t[d3 - 1]++;
-        t[d4 - 1]++;
-        t[d5 - 1]++;
-        for (var i = 0; i < 6; i++)
-            if (t[i] >= 3)
-                return (i + 1) * 3;
-        return 0;
-    }
-
-    public static int Threes(int d1, int d2, int d3, int d4, int d5)
-    {
-        int s;
-        s = 0;
-        if (d1 == 3) s += 3;
-        if (d2 == 3) s += 3;
-        if (d3 == 3) s += 3;
-        if (d4 == 3) s += 3;
-        if (d5 == 3) s += 3;
-        return s;
     }
 
     public static int TwoPair(int d1, int d2, int d3, int d4, int d5)
@@ -226,25 +120,9 @@ public class YahtzeeGame
         return 0;
     }
 
-    public static int Twos(int d1, int d2, int d3, int d4, int d5)
-    {
-        var sum = 0;
-        if (d1 == 2) sum += 2;
-        if (d2 == 2) sum += 2;
-        if (d3 == 2) sum += 2;
-        if (d4 == 2) sum += 2;
-        if (d5 == 2) sum += 2;
-        return sum;
-    }
-
     public static int Yahtzee(params int[] dice)
     {
-        var counts = new int[6];
-        foreach (var die in dice)
-            counts[die - 1]++;
-        for (var i = 0; i != 6; i++)
-            if (counts[i] == 5)
-                return 50;
-        return 0;
+        int score = OfAKind(5, dice);
+        return score > 0 ? 50 : 0;
     }
 }

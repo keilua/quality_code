@@ -1,6 +1,7 @@
 #region
 
 using FluentAssertions;
+using Xunit;
 
 #endregion
 

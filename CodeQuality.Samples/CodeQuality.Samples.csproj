@@ -22,7 +22,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="Xunit"/>
+      <None Update="TestDrivenDevelopment\Submarine\Input.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

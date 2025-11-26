@@ -1,3 +1,6 @@
+
+using Xunit;
+
 namespace CodeQuality.Samples.TestDrivenDevelopment.Submarine;
 
 /// <summary>
@@ -25,13 +28,129 @@ namespace CodeQuality.Samples.TestDrivenDevelopment.Submarine;
 /// </summary>
 public class Submarine
 {
+    public int HorizontalPosition { get; private set; } = 0;
+     public int Aim { get; private set; } = 0;
+     public int Depth { get; private set; } = 0;
+
+     private record Instruction (string Action ,int Value )
+    {
+    };
+     private Instruction ParseCommand (string command)
+    {
+        var parts = command.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        string action = parts[0].ToLower();
+        return new Instruction(action, int.Parse (parts[1]));
+    }
     public void ExecuteCommand(string command)
     {
-        throw new NotImplementedException();
+        var instruction = ParseCommand (command);
+            if (instruction.Action == "forward")
+        {
+            moveForward(instruction);
+        }
+        else if (instruction.Action == "down")
+        {
+            moveDown(instruction);
+        }
+        else if (instruction.Action == "up")
+        {
+            moveUp(instruction);
+        }
+
+        /*
+var instruction = ParseCommand (command);
+IAction action = instruction.ToAction();
+action.MoveSubmarine();
+
+        */
+    }
+
+    private void moveUp(Instruction instruction)
+    {
+        Aim -= instruction.Value;
+    }
+
+    private void moveDown(Instruction instruction)
+    {
+        Aim += instruction.Value;
+    }
+
+    private void moveForward(Instruction instruction)
+    {
+        HorizontalPosition += instruction.Value;
+        Depth += Aim * instruction.Value;
     }
 }
 
 public class SubmarineTest
 {
-    
+        [Fact]
+        public void Forward5move()
+        {
+            var submarine = new Submarine();
+            submarine.ExecuteCommand("forward 5");
+            Assert.Equal(5, submarine.HorizontalPosition);
+        }
+
+        [Fact]
+        public void Down5mov()
+        {
+            var submarine = new Submarine();
+            submarine.ExecuteCommand("down 5");
+            Assert.Equal(5, submarine.Aim);
+        }
+
+        [Fact]
+        public void Forward8moveafterdown5()
+        {
+            var submarine = new Submarine();
+
+            submarine.ExecuteCommand("down 5");     
+            submarine.ExecuteCommand("forward 8");  
+
+            Assert.Equal(8, submarine.HorizontalPosition); 
+            Assert.Equal(40, submarine.Depth);            
+        }
+
+        [Fact]
+        public void allupanddown()
+        {
+            var submarine = new Submarine();
+
+            submarine.ExecuteCommand("down 5");
+            submarine.ExecuteCommand("up 3"); 
+            submarine.ExecuteCommand("down 8");
+
+            Assert.Equal(10, submarine.Aim);
+        }
+
+        [Fact]
+        public void completemoveexmple()
+        {
+            var submarine = new Submarine();
+
+            submarine.ExecuteCommand("forward 5");
+            submarine.ExecuteCommand("down 5");
+            submarine.ExecuteCommand("forward 8");
+            submarine.ExecuteCommand("up 3");
+            submarine.ExecuteCommand("down 8");
+            submarine.ExecuteCommand("forward 2");
+
+            Assert.Equal(15, submarine.HorizontalPosition);
+            Assert.Equal(60, submarine.Depth);
+            Assert.Equal(10, submarine.Aim);
+        }
+
+        [Fact]
+        public void input()
+        {
+             var submarine = new Submarine();
+            var commands =
+             File.ReadAllLines("TestDrivenDevelopment/Submarine/Input.txt");
+            commands.ToList().ForEach(command => submarine.ExecuteCommand(command));
+            var result = submarine.HorizontalPosition * submarine.Depth;
+            Assert.Equal(2134882034,result);
+        }
+
+
 }

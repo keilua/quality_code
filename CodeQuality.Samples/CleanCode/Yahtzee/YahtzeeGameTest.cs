@@ -1,3 +1,5 @@
+using Xunit;
+
 namespace CodeQuality.Samples.CleanCode.Yahtzee;
 
 public class YahtzeeGameTest
@@ -14,24 +16,24 @@ public class YahtzeeGameTest
     [Fact]
     public void Fact_1s()
     {
-        Assert.True(YahtzeeGame.Ones(1, 2, 3, 4, 5) == 1);
-        Assert.Equal(2, YahtzeeGame.Ones(1, 2, 1, 4, 5));
-        Assert.Equal(0, YahtzeeGame.Ones(6, 2, 2, 4, 5));
-        Assert.Equal(4, YahtzeeGame.Ones(1, 2, 1, 1, 1));
+        Assert.True(new YahtzeeGame(1, 2, 3, 4, 5).Ones() == 1);
+        Assert.Equal(2, new YahtzeeGame(1, 2, 1, 4, 5).Ones());
+        Assert.Equal(0, new YahtzeeGame(6, 2, 2, 4, 5).Ones());
+        Assert.Equal(4, new YahtzeeGame(1, 2, 1, 1, 1).Ones());
     }
 
     [Fact]
     public void Fact_2s()
     {
-        Assert.Equal(4, YahtzeeGame.Twos(1, 2, 3, 2, 6));
-        Assert.Equal(10, YahtzeeGame.Twos(2, 2, 2, 2, 2));
+        Assert.Equal(4,  new YahtzeeGame(1, 2, 3, 2, 6).Twos());
+        Assert.Equal(10, new YahtzeeGame (2, 2, 2, 2, 2).Twos());
     }
 
     [Fact]
     public void Fact_threes()
     {
-        Assert.Equal(6, YahtzeeGame.Threes(1, 2, 3, 2, 3));
-        Assert.Equal(12, YahtzeeGame.Threes(2, 3, 3, 3, 3));
+        Assert.Equal(6, new YahtzeeGame(1, 2, 3, 2, 3).Threes());
+        Assert.Equal(12, new YahtzeeGame(2, 3, 3, 3, 3).Threes());
     }
 
     [Fact]
@@ -84,9 +86,9 @@ public class YahtzeeGameTest
     [Fact]
     public void sixes_Fact()
     {
-        Assert.Equal(0, new YahtzeeGame(4, 4, 4, 5, 5).sixes());
-        Assert.Equal(6, new YahtzeeGame(4, 4, 6, 5, 5).sixes());
-        Assert.Equal(18, new YahtzeeGame(6, 5, 6, 6, 5).sixes());
+        Assert.Equal(0, new YahtzeeGame(4, 4, 4, 5, 5).Sixes());
+        Assert.Equal(6, new YahtzeeGame(4, 4, 6, 5, 5).Sixes());
+        Assert.Equal(18, new YahtzeeGame(6, 5, 6, 6, 5).Sixes());
     }
 
     [Fact]
