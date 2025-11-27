@@ -5,7 +5,8 @@ namespace CodeQuality.Samples.TestDrivenDevelopment.MoneyKata;
 
 /// <summary>
 /// Simulate a stock portfolio.
-/// You can add amounts in your portfolio (ex: 10 EUR, 15 USD). The portfolio will hold several "amounts" in different currencies.
+/// You can add amounts in your portfolio (ex: 10 EUR, 15 USD). 
+/// The portfolio will hold several "amounts" in different currencies.
 /// We want to evaluate the portfolio in a specific currency: what is the EUR value of my portfolio?
 ///
 /// Here's an exchange rate table:
