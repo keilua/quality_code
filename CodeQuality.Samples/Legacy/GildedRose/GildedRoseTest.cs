@@ -8,20 +8,23 @@ public class GildedRoseTest
         var result = Program.RunSimulation();
         return Verify(result);
     }
+
     [Fact]
-    public Task RunTestRunSimulation_10()
+    public Task TestRunSimulation_10()
     {
         var result = Program.RunSimulation(10);
         return Verify(result);
     }
+
     [Fact]
-    public Task RunTestRunSimulation_30()
+    public Task TestRunSimulation_30()
     {
         var result = Program.RunSimulation(30);
         return Verify(result);
     }
+
     [Fact]
-    public Task RunTestRunSimulation_50()
+    public Task TestRunSimulation_50()
     {
         var result = Program.RunSimulation(50);
         return Verify(result);
