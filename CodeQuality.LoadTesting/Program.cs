@@ -1,22 +1,44 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Caching.Memory;
 
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
-app.MapGet("/products", () =>
-{
-    var filePath = Path.Combine(AppContext.BaseDirectory, "products_1.json");
+var filePath = Path.Combine(AppContext.BaseDirectory, "products_2.json");
     var json = File.ReadAllText(filePath);
     var products = JsonSerializer.Deserialize<List<Product>>(json);
-    var accessoriesValue = products.Where(product => product.Name != "Laptop" && product.Name != "Screen").ToList()
-        .Sum(product => product.Price);
-    var laptopValue = products.Where(product => product.Name == "Laptop").ToList().Sum(product => product.Price);
-    var screenValue = products.Where(product => product.Name == "Screen").ToList().Sum(product => product.Price);
-    Thread.Sleep(20);
-    return Results.Ok(new {accessoriesValue, laptopValue, ScreenValue = screenValue});
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddMemoryCache();
+var app = builder.Build();
+
+app.MapGet("/products", (IMemoryCache cache) =>
+{   
+    if (!cache.TryGetValue("result", out Total total))
+    {
+    var accessoriesValue = 0;
+    var laptopValue = 0;
+    var screenValue = 0;
+
+    foreach (var product in products)
+    {
+        if (product.Name== "Laptop")
+        {
+            laptopValue++;
+        }
+        if (product.Name== "Screen")
+        {
+            screenValue++;
+        }
+        else accessoriesValue++;
+    }
+    total =  new Total(laptopValue,screenValue,accessoriesValue);
+    cache.Set("result", total);
+    }
+    
+    return Results.Ok(new {total});
 });
 app.Run();
 
 public record Product(
     [property: JsonPropertyName("name")] string Name,
     [property: JsonPropertyName("price")] decimal Price);
+
+    public record Total(int LaptopValue,int ScreenValue, int AccessoriesValue);
